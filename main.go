@@ -9,8 +9,9 @@ import (
 func main() {
 	fmt.Println(models.Db)
 
-	u := &models.User{Name: "testuser4", Email: "test4@example.com", Password: "test4password"}
+	u, err := models.GetUser(1)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println(u)
-
-	u.CreateUser()
 }
