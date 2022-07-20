@@ -2,13 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/tomotakashimizu/todoapp-go/config"
+	"github.com/tomotakashimizu/todoapp-go/app/models"
 )
 
 func main() {
-	fmt.Println(config.Config)
-
-	log.Println("test")
+	fmt.Println(models.Db)
 }
