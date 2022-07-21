@@ -25,13 +25,20 @@ func LoadPage(title string) (*Page, error) {
 	return &Page{Title: title, Body: body}, nil
 }
 
+var templates = template.Must(template.ParseFiles("app/views/view.html", "app/views/edit.html"))
+
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	t, err := template.ParseFiles("app/views/" + tmpl + ".html")
+	// t, err := template.ParseFiles("app/views/" + tmpl + ".html")
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// }
+	// // w に p の値を使って html を表示
+	// t.Execute(w, p)
+
+	err := templates.ExecuteTemplate(w, tmpl+".html", p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	// w に p の値を使って html を表示
-	t.Execute(w, p)
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
