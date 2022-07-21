@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
 
 type Page struct {
@@ -41,9 +43,27 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	}
 }
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
+var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validPath.FindStringSubmatch(r.URL.Path)
+		// http://localhost:8080/view/test
+		// fmt.Println(m, r.URL.Path)
+		// [/view/test view test] /view/test
+		if m == nil {
+			http.NotFound(w, r)
+			fmt.Println("NotFound")
+			return
+		}
+		fn(w, r, m[2])
+	}
+}
+
+func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	// URL の /view/ 以降の文字列を title に代入
-	title := r.URL.Path[len("/view/"):]
+	// title := r.URL.Path[len("/view/"):]
+
 	// title.txt の file があれば p に情報を代入
 	p, err := LoadPage(title)
 	if err != nil {
@@ -56,8 +76,8 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "view", p)
 }
 
-func editHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/edit/"):]
+func editHandler(w http.ResponseWriter, _ *http.Request, title string) {
+	// title := r.URL.Path[len("/edit/"):]
 	p, err := LoadPage(title)
 	if err != nil {
 		p = &Page{Title: title}
@@ -65,8 +85,8 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "edit", p)
 }
 
-func saveHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path[len("/save/"):]
+func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+	// title := r.URL.Path[len("/save/"):]
 	body := r.FormValue("body") //この値が取れなくてもエラーは起きず空の値が入る
 	p := &Page{Title: title, Body: []byte(body)}
 	err := p.SavePage()

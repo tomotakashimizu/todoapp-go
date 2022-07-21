@@ -11,9 +11,9 @@ func StartMainServer() error {
 	http.Handle("/static/", http.StripPrefix("/static/", files))
 
 	// URL /view/ の処理を関数で定義
-	http.HandleFunc("/view/", viewHandler)
-	http.HandleFunc("/edit/", editHandler)
-	http.HandleFunc("/save/", saveHandler)
+	http.HandleFunc("/view/", makeHandler(viewHandler))
+	http.HandleFunc("/edit/", makeHandler(editHandler))
+	http.HandleFunc("/save/", makeHandler(saveHandler))
 
 	// サーバを起動
 	return http.ListenAndServe(":"+config.Config.Port, nil)
