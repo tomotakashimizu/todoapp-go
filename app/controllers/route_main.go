@@ -40,7 +40,8 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	// title.txt の file があれば p に情報を代入
 	p, err := LoadPage(title)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		// http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
 		return
 	}
 	// w に 値を書き込んで表示
@@ -55,4 +56,16 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 	renderTemplate(w, "edit", p)
+}
+
+func saveHandler(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Path[len("/save/"):]
+	body := r.FormValue("body")
+	p := &Page{Title: title, Body: []byte(body)}
+	err := p.SavePage()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/view/"+p.Title, http.StatusFound)
 }
