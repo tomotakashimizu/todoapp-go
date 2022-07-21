@@ -60,7 +60,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 func saveHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/save/"):]
-	body := r.FormValue("body")
+	body := r.FormValue("body") //この値が取れなくてもエラーは起きず空の値が入る
 	p := &Page{Title: title, Body: []byte(body)}
 	err := p.SavePage()
 	if err != nil {
