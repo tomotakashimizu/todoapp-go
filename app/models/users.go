@@ -40,5 +40,26 @@ func GetUser(id int) (User, error) {
 	row := Db.QueryRow(cmd, id)
 	var user User
 	err := row.Scan(&user.ID, &user.UUID, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
-	return user, err
+	if err != nil {
+		log.Fatalf("GetUser: %s", err.Error())
+	}
+	return user, nil
+}
+
+func (u *User) UpdateUser() error {
+	cmd := `update users set name = ?, email = ? where id = ?`
+	_, err := Db.Exec(cmd, u.Name, u.Email, u.ID)
+	if err != nil {
+		log.Fatalf("UpdateUser: %s", err.Error())
+	}
+	return nil
+}
+
+func (u *User) DeleteUser() error {
+	cmd := `delete from users where id = ?`
+	_, err := Db.Exec(cmd, u.ID)
+	if err != nil {
+		log.Fatalf("DeleteUser: %s", err.Error())
+	}
+	return nil
 }

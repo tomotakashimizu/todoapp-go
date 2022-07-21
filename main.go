@@ -14,4 +14,11 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(u)
+
+	u.Name = "ChangeName"
+	u.UpdateUser()
+
+	u.DeleteUser()
+	u, _ = models.GetUser(1)
+	fmt.Println(u)
 }
