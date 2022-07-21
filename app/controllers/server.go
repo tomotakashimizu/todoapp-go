@@ -12,6 +12,7 @@ func StartMainServer() error {
 
 	// URL /view/ の処理を関数で定義
 	http.HandleFunc("/view/", viewHandler)
+	http.HandleFunc("/edit/", editHandler)
 
 	// サーバを起動
 	return http.ListenAndServe(":"+config.Config.Port, nil)
