@@ -2,17 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/tomotakashimizu/todoapp-go/app/models"
+	"github.com/tomotakashimizu/todoapp-go/app/controllers"
 )
 
 func main() {
-	fmt.Println(models.Db)
+	p1 := controllers.Page{Title: "test", Body: []byte("This is a sample page.")}
+	p1.SavePage()
 
-	t, err := models.GetAllTodos()
-	if err != nil {
-		log.Fatalf("failed to GetAllTodos: %s", err.Error())
-	}
-	fmt.Println(t)
+	p2, _ := controllers.LoadPage(p1.Title)
+	fmt.Println(string(p2.Body))
 }
