@@ -1,4 +1,4 @@
-package controllers
+package tutorial
 
 import (
 	"fmt"
@@ -29,7 +29,7 @@ func LoadPage(title string) (*Page, error) {
 	return &Page{Title: title, Body: body}, nil
 }
 
-var templates = template.Must(template.ParseFiles("app/views/view.html", "app/views/edit.html"))
+var templates = template.Must(template.ParseFiles("app/views/tutorial/view.html", "app/views/tutorial/edit.html"))
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	// t, err := template.ParseFiles("app/views/" + tmpl + ".html")
