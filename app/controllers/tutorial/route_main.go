@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+
+	"github.com/tomotakashimizu/todoapp-go/config"
 )
 
 type Page struct {
@@ -95,4 +97,14 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 		return
 	}
 	http.Redirect(w, r, "/view/"+p.Title, http.StatusFound)
+}
+
+func StartTutorialServer() error {
+	// URL /view/ の処理を関数で定義
+	http.HandleFunc("/view/", makeHandler(viewHandler))
+	http.HandleFunc("/edit/", makeHandler(editHandler))
+	http.HandleFunc("/save/", makeHandler(saveHandler))
+
+	// サーバを起動
+	return http.ListenAndServe(":"+config.Config.Port, nil)
 }
