@@ -8,9 +8,16 @@
   </head>
   <body>
     <h1>Todos</h1>
+    <form action="/create/" method="post">
+      title
+      <div><input type="text" name="title" /></div>
+      content
+      <div><textarea name="content" cols="30" rows="10"></textarea></div>
+      <input type="submit" value="create" />
+    </form>
     <ol>
       {{range .}}
-      <li>{{.Content}}</li>
+      <li>{{.Title}}</li>
       {{end}}
     </ol>
   </body>

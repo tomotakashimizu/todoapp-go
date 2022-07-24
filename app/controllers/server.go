@@ -32,6 +32,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 
 func StartMainServer() error {
 	http.HandleFunc("/todos/", getAllTodosHandler)
+	http.HandleFunc("/create/", createTodoHandler)
 
 	// サーバを起動
 	return http.ListenAndServe(":"+config.Config.Port, nil)

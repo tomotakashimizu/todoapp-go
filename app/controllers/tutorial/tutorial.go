@@ -78,7 +78,8 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	renderTemplate(w, "view", p)
 }
 
-func editHandler(w http.ResponseWriter, _ *http.Request, title string) {
+func editHandler(w http.ResponseWriter, r *http.Request, title string) {
+	fmt.Println(r.Method)
 	// title := r.URL.Path[len("/edit/"):]
 	p, err := LoadPage(title)
 	if err != nil {
@@ -88,6 +89,7 @@ func editHandler(w http.ResponseWriter, _ *http.Request, title string) {
 }
 
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+	fmt.Println(r.Method)
 	// title := r.URL.Path[len("/save/"):]
 	body := r.FormValue("body") //この値が取れなくてもエラーは起きず空の値が入る
 	p := &Page{Title: title, Body: []byte(body)}
