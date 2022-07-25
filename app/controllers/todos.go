@@ -28,6 +28,15 @@ func createTodoHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/todos/", http.StatusFound)
 }
 
+func editTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
+	todo, err := models.GetTodo(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	renderTemplate(w, "edit", todo)
+}
+
 // func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
 
 // }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Todo</title>
+  </head>
+  <body>
+    <h1>Edit Todo</h1>
+    <form action="/update/{{.ID}}" method="post">
+      title
+      <div><input type="text" value="{{.Title}}" name="title" /></div>
+      content
+      <div>
+        <textarea name="content" cols="30" rows="10">{{.Content}}</textarea>
+      </div>
+      <input type="submit" value="update" />
+    </form>
+  </body>
+</html>

@@ -17,7 +17,7 @@
     </form>
     <ol>
       {{range .}}
-      <li>{{.Title}}</li>
+      <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a></li>
       {{end}}
     </ol>
   </body>

@@ -1,13 +1,16 @@
 package controllers
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"regexp"
+	"strconv"
 
 	"github.com/tomotakashimizu/todoapp-go/config"
 )
 
-var templates = template.Must(template.ParseFiles("app/views/todos.html"))
+var templates = template.Must(template.ParseFiles("app/views/todos.html", "app/views/edit.html"))
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	err := templates.ExecuteTemplate(w, tmpl+".html", data)
@@ -16,23 +19,29 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	}
 }
 
-// var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+var validPath = regexp.MustCompile("^/(edit)/([0-9]+)$")
 
-// func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		m := validPath.FindStringSubmatch(r.URL.Path)
-// 		if m == nil {
-// 			http.NotFound(w, r)
-// 			fmt.Println("NotFound")
-// 			return
-// 		}
-// 		fn(w, r, m[2])
-// 	}
-// }
+func makeHandler(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validPath.FindStringSubmatch(r.URL.Path)
+		if m == nil {
+			http.NotFound(w, r)
+			fmt.Println("NotFound")
+			return
+		}
+		id, err := strconv.Atoi(m[2])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		fn(w, r, id)
+	}
+}
 
 func StartMainServer() error {
 	http.HandleFunc("/todos/", getAllTodosHandler)
 	http.HandleFunc("/create/", createTodoHandler)
+	http.HandleFunc("/edit/", makeHandler(editTodoHandler))
 
 	// サーバを起動
 	return http.ListenAndServe(":"+config.Config.Port, nil)
