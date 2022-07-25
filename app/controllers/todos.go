@@ -18,6 +18,10 @@ func getAllTodosHandler(w http.ResponseWriter, _ *http.Request) {
 
 func createTodoHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("createTodoHandler", r.Method)
+	if r.Method != "POST" {
+		http.Error(w, "r.Method Error", http.StatusInternalServerError)
+		return
+	}
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 	todo := &models.Todo{Title: title, Content: content, UserID: 1}
@@ -38,6 +42,11 @@ func editTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
 }
 
 func updateTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
+	fmt.Println("updateTodoHandler", r.Method)
+	if r.Method != "POST" {
+		http.Error(w, "r.Method Error", http.StatusInternalServerError)
+		return
+	}
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 	todo := models.Todo{ID: id, Title: title, Content: content}
