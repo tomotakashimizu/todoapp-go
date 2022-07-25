@@ -37,6 +37,13 @@ func editTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
 	renderTemplate(w, "edit", todo)
 }
 
-// func updateTodoHandler(w http.ResponseWriter, r *http.Request) {
-
-// }
+func updateTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	todo := models.Todo{ID: id, Title: title, Content: content}
+	if err := todo.UpdateTodo(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/todos/", http.StatusFound)
+}

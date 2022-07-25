@@ -86,9 +86,9 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 }
 
 func (t *Todo) UpdateTodo() error {
-	cmd := `update todos set title = ?, content = ?, user_id = ? 
+	cmd := `update todos set title = ?, content = ? 
 	where id = ?`
-	_, err := Db.Exec(cmd, t.Title, t.Content, t.UserID, t.ID)
+	_, err := Db.Exec(cmd, t.Title, t.Content, t.ID)
 	if err != nil {
 		log.Fatalln(err)
 	}
