@@ -15,10 +15,19 @@
       <div><textarea name="content" cols="30" rows="10"></textarea></div>
       <input type="submit" value="create" />
     </form>
+
+    <h2>Todos</h2>
     <ol>
-      {{range .}}
+      {{range .}} {{if eq .Completed 0}}
       <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a> | <a href="/delete/{{.ID}}">delete</a></li>
-      {{end}}
+      {{end}} {{end}}
+    </ol>
+
+    <h2>Completed</h2>
+    <ol>
+      {{range .}} {{if eq .Completed 1}}
+      <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a> | <a href="/delete/{{.ID}}">delete</a></li>
+      {{end}} {{end}}
     </ol>
   </body>
 </html>

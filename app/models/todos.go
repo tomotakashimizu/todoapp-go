@@ -10,6 +10,7 @@ type Todo struct {
 	ID        int
 	Title     string
 	Content   string
+	Completed int //trueなら1、falseなら0 （初期値は0）
 	UserID    int
 	CreatedAt time.Time
 }
@@ -18,25 +19,26 @@ func (t *Todo) CreateTodo() error {
 	cmd := `INSERT INTO todos(
 		title,
 		content,
+		completed,
 		user_id,
 		created_at)
-		values (?, ?, ?, ?)
+		values (?, ?, ?, ?, ?)
 		`
 
-	_, err := Db.Exec(cmd, t.Title, t.Content, t.UserID, time.Now())
+	_, err := Db.Exec(cmd, t.Title, t.Content, 0, t.UserID, time.Now())
 	return err
 }
 
 func GetTodo(id int) (Todo, error) {
-	cmd := `SELECT id, title, content, user_id, created_at from todos where id = ?`
+	cmd := `SELECT id, title, content, completed, user_id, created_at from todos where id = ?`
 	row := Db.QueryRow(cmd, id)
 	var todo Todo
-	err := row.Scan(&todo.ID, &todo.Title, &todo.Content, &todo.UserID, &todo.CreatedAt)
+	err := row.Scan(&todo.ID, &todo.Title, &todo.Content, &todo.Completed, &todo.UserID, &todo.CreatedAt)
 	return todo, err
 }
 
 func GetAllTodos() ([]Todo, error) {
-	cmd := `SELECT id, title, content, user_id, created_at from todos`
+	cmd := `SELECT id, title, content, completed, user_id, created_at from todos`
 	rows, err := Db.Query(cmd)
 	if err != nil {
 		return nil, err
@@ -44,7 +46,7 @@ func GetAllTodos() ([]Todo, error) {
 	var todos []Todo
 	for rows.Next() {
 		var todo Todo
-		err = rows.Scan(&todo.ID, &todo.Title, &todo.Content, &todo.UserID, &todo.CreatedAt)
+		err = rows.Scan(&todo.ID, &todo.Title, &todo.Content, &todo.Completed, &todo.UserID, &todo.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
@@ -59,7 +61,7 @@ func GetAllTodos() ([]Todo, error) {
 }
 
 func (u *User) GetTodosByUser() (todos []Todo, err error) {
-	cmd := `select id, title, content, user_id, created_at from todos
+	cmd := `select id, title, content, completed, user_id, created_at from todos
 	where user_id = ?`
 
 	rows, err := Db.Query(cmd, u.ID)
@@ -72,6 +74,7 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 			&todo.ID,
 			&todo.Title,
 			&todo.Content,
+			&todo.Completed,
 			&todo.UserID,
 			&todo.CreatedAt)
 
@@ -86,9 +89,9 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 }
 
 func (t *Todo) UpdateTodo() error {
-	cmd := `update todos set title = ?, content = ? 
+	cmd := `update todos set title = ?, content = ?, completed = ? 
 	where id = ?`
-	_, err := Db.Exec(cmd, t.Title, t.Content, t.ID)
+	_, err := Db.Exec(cmd, t.Title, t.Content, t.Completed, t.ID)
 	if err != nil {
 		log.Fatalln(err)
 	}

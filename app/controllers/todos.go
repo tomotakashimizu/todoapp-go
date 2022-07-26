@@ -49,7 +49,14 @@ func updateTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
 	}
 	title := r.FormValue("title")
 	content := r.FormValue("content")
-	todo := models.Todo{ID: id, Title: title, Content: content}
+	fmt.Println("completed", r.FormValue("completed"))
+	var completed int
+	if r.FormValue("completed") == "on" {
+		completed = 1
+	} else {
+		completed = 0
+	}
+	todo := models.Todo{ID: id, Title: title, Content: content, Completed: completed}
 	if err := todo.UpdateTodo(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

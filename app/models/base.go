@@ -39,6 +39,7 @@ func init() {
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		title STRING,
 		content TEXT,
+		completed INTEGER,
 		user_id INTEGER,
 		created_at DATETIME)`, tableNameTodo)
 
