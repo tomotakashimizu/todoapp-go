@@ -18,14 +18,14 @@
 
     <h2>Todos</h2>
     <ol>
-      {{range .}} {{if eq .Completed 0}}
+      {{range .}} {{if eq .Completed ""}}
       <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a> | <a href="/delete/{{.ID}}">delete</a></li>
       {{end}} {{end}}
     </ol>
 
     <h2>Completed</h2>
     <ol>
-      {{range .}} {{if eq .Completed 1}}
+      {{range .}} {{if eq .Completed "on"}}
       <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a> | <a href="/delete/{{.ID}}">delete</a></li>
       {{end}} {{end}}
     </ol>

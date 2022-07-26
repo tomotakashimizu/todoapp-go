@@ -16,7 +16,7 @@
         <textarea name="content" cols="30" rows="10">{{.Content}}</textarea>
       </div>
       <div>
-        {{if eq .Completed 1}}
+        {{if eq .Completed "on"}}
         <input type="checkbox" id="completed" name="completed" checked />
         {{else}}
         <input type="checkbox" id="completed" name="completed" />

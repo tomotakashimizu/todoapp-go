@@ -10,7 +10,7 @@ type Todo struct {
 	ID        int
 	Title     string
 	Content   string
-	Completed int //trueなら1、falseなら0 （初期値は0）
+	Completed string //trueなら"on"、falseなら"" （初期値は""）
 	UserID    int
 	CreatedAt time.Time
 }
@@ -25,7 +25,7 @@ func (t *Todo) CreateTodo() error {
 		values (?, ?, ?, ?, ?)
 		`
 
-	_, err := Db.Exec(cmd, t.Title, t.Content, 0, t.UserID, time.Now())
+	_, err := Db.Exec(cmd, t.Title, t.Content, "", t.UserID, time.Now())
 	return err
 }
 
