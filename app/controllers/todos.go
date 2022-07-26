@@ -56,3 +56,13 @@ func updateTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
 	}
 	http.Redirect(w, r, "/todos/", http.StatusFound)
 }
+
+func deleteTodoHandler(w http.ResponseWriter, r *http.Request, id int) {
+	fmt.Println("deleteTodoHandler", r.Method)
+	todo := models.Todo{ID: id}
+	if err := todo.DeleteTodo(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/todos/", http.StatusFound)
+}

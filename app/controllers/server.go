@@ -19,7 +19,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	}
 }
 
-var validPath = regexp.MustCompile("^/(edit|update)/([0-9]+)$")
+var validPath = regexp.MustCompile("^/(edit|update|delete)/([0-9]+)$")
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +43,7 @@ func StartMainServer() error {
 	http.HandleFunc("/create/", createTodoHandler)
 	http.HandleFunc("/edit/", makeHandler(editTodoHandler))
 	http.HandleFunc("/update/", makeHandler(updateTodoHandler))
+	http.HandleFunc("/delete/", makeHandler(deleteTodoHandler))
 
 	// サーバを起動
 	return http.ListenAndServe(":"+config.Config.Port, nil)
