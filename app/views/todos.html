@@ -17,10 +17,7 @@
     </form>
     <ol>
       {{range .}}
-      <li>
-        {{.Title}} <a href="/edit/{{.ID}}">edit</a>
-        <a href="/delete/{{.ID}}">delete</a>
-      </li>
+      <li>{{.Title}} <a href="/edit/{{.ID}}">edit</a> | <a href="/delete/{{.ID}}">delete</a></li>
       {{end}}
     </ol>
   </body>
